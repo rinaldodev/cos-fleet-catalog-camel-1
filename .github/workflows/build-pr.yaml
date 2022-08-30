@@ -15,7 +15,33 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  authorize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Read authorizers"
+        id: authorizers
+        run: |
+          git clone \
+          --depth 1  \
+          --filter=blob:none  \
+          --sparse \
+          https://github.com/bf2fc6cc711aee1a0c2a/cos-fleet-catalog-camel;
+          
+          cd cos-fleet-catalog-camel
+          git sparse-checkout set .github
+          
+          content=$(yq e -o=j -I=0 '.authorized[]' .github/authorized.yaml)
+          
+          echo "::set-output name=authorized::$content"
+      - name: "Add label if authorized"
+        uses: actions-ecosystem/action-add-labels@v1
+        if: ${{contains(steps.set_var.outputs.authorized, github.actor)}}
+        with:
+          labels: authorized
+
   build:
+    if: contains( github.event.pull_request.labels.*.name, 'authorized')
+    needs: authorize
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
