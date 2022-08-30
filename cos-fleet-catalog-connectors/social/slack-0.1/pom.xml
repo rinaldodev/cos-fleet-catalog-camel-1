@@ -19,8 +19,8 @@
 
     <properties>
         <cos.connector.type>slack</cos.connector.type>
-        <quarkus.container-image.name>cos-connector-${cos.connector.type}</quarkus.container-image.name>
-        <quarkus.container-image.tag>${cos.connector.version}.${cos.connector.revision}</quarkus.container-image.tag>
+        <quarkus.container-image.name>${cos.connector.container.prefix}-${cos.connector.type}</quarkus.container-image.name>
+        <quarkus.container-image.tag>${cos.connector.container.tag}</quarkus.container-image.tag>
     </properties>
 
     <build>
@@ -33,7 +33,7 @@
                         <connector>
                             <name>${cos.connector.type}-source-${cos.connector.version}</name>
                             <title>${project.name} source</title>
-                            <description>${project.description} source</description>
+                            <description>Receive messages from a Slack channel.</description>
                             <adapter>
                                 <prefix>slack</prefix>
                                 <name>cos-${cos.connector.type}-source</name>
@@ -58,7 +58,7 @@
                         <connector>
                             <name>${cos.connector.type}-sink-${cos.connector.version}</name>
                             <title>${project.name} sink</title>
-                            <description>${project.description} sink</description>
+                            <description>Send messages to a Slack channel.</description>
                             <adapter>
                                 <prefix>slack</prefix>
                                 <name>${cos.connector.type}-sink</name>
@@ -83,7 +83,7 @@
                     <dependency>
                         <groupId>com.slack.api</groupId>
                         <artifactId>slack-api-model</artifactId>
-                        <version>1.8.1</version>
+                        <version>1.25.0</version>
                     </dependency>
                 </dependencies>
             </plugin>
