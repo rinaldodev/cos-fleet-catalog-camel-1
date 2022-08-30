@@ -18,7 +18,7 @@ jobs:
   authorize:
     runs-on: ubuntu-latest
     steps:
-      - name: "Read authorizers"
+      - name: "Read authorizers1"
         id: authorizers
         run: |
           git clone \
